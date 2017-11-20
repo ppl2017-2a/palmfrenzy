@@ -1,0 +1,65 @@
+[gd_scene load_steps=6 format=1]
+
+[ext_resource path="res://assets/on_game/kelapa sawitnya/sprite_sawit.png" type="Texture" id=1]
+[ext_resource path="res://scripts/sawit.gd" type="Script" id=2]
+[ext_resource path="res://scenes/game/air.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/game/pupuk.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/game/panen.tscn" type="PackedScene" id=5]
+
+[node name="sawit" type="Sprite"]
+
+transform/scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 1 )
+hframes = 5
+script/script = ExtResource( 2 )
+start_time = 0.0
+end_time = 100.0
+critical_time = 60
+need_time = 98
+
+[node name="Timer" type="Timer" parent="."]
+
+process_mode = 1
+wait_time = 1.0
+one_shot = false
+autostart = false
+
+[node name="air" parent="." instance=ExtResource( 3 )]
+
+visibility/visible = false
+transform/pos = Vector2( 6.40001, -235.4 )
+transform/scale = Vector2( 0.3, 0.3 )
+
+[node name="pupuk" parent="." instance=ExtResource( 4 )]
+
+visibility/visible = false
+transform/pos = Vector2( 4.80001, -233.6 )
+transform/scale = Vector2( 0.3, 0.3 )
+
+[node name="panen" parent="." instance=ExtResource( 5 )]
+
+visibility/visible = false
+transform/pos = Vector2( 4.80001, -233.6 )
+transform/scale = Vector2( 0.3, 0.3 )
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+
+rect/rotation = 90.0
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 170.0
+margin/top = 140.0
+margin/right = 410.0
+margin/bottom = 170.0
+range/min = 0.0
+range/max = 100.0
+range/step = 1.0
+range/page = 0.0
+range/value = 90.0
+range/exp_edit = false
+range/rounded = true
+percent/visible = false
+
+
