@@ -1,2 +1,2 @@
-# Palm Frenzy
-Simulasi berkebun kelapa sawit
+# palmfrenzy
+game simulasi perkebunan sawit
