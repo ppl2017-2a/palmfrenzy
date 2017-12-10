@@ -1,12 +1,4 @@
 extends ReferenceFrame
-onready var gambar = [
-"res://assets/ensiklopedia/tampilan encyclopedia 1.png",
-"res://assets/ensiklopedia/tampilan encyclopedia 2.png",
-"res://assets/ensiklopedia/tampilan encyclopedia 3.png",
-"res://assets/ensiklopedia/tampilan encyclopedia 4.png",
-"res://assets/ensiklopedia/tampilan encyclopedia 5.png",
-"res://assets/ensiklopedia/tampilan encyclopedia 6.png"
-]
 onready var currentFrame = 0
 onready var kontenEnsiklopedia = get_node("Sprite")
 onready var tombolNext = get_node("next")
@@ -34,5 +26,5 @@ func _target(var currentFrame = 0):
 	else:
 		tombolNext.set_hidden(false)
 		tombolPrev.set_hidden(false)
-	kontenEnsiklopedia.get_texture().load(gambar[currentFrame])
+	kontenEnsiklopedia.set_frame(currentFrame)
 

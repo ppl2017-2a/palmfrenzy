@@ -1,39 +1,36 @@
-
-extends Node
-
-const DATA_DELIMITER = " "
-
-var save_path = "user://savedata.bin"
-
+extends "file_manager.gd"
 func _ready():
-	FileManager.set_file_password(save_path, str("palmfrenzy", OS.get_unique_ID())) # Set the password
+	pass
 
-func get_reached_level(pack):
-	var save_lines = FileManager.get_file_lines(save_path) # Read the file
-	
-	for line in save_lines:
-		var line_parts = line.split(DATA_DELIMITER)
-		if line_parts.size() >= 2:
-			if line_parts[0] == pack:
-				return int(line_parts[1])
-	
-	return 1 # If we either haven't found the pack, or we failed to open the savedata, we just return one (e.g. first level)
+func save(_player,var data = {}):
+	var nama = _player
+	var save_path = "res://"+nama+".json"
+	var save_dict = {}
+	var nodes_to_save = get_tree().get_nodes_in_group("persistent")
+	save_dict[nama] = {}
+	for keys in data:
+		save_dict["%s"%nama][keys] = data[keys]
+#		save_dict["player"][node.get_path()] = node.get_state()
+	print(save_dict)
+	write_file(save_path,save_dict.to_json())
 
-func set_reached_level(pack, value):
-	var current_save_lines = FileManager.get_file_lines(save_path)
-	var future_save_lines = []
-	var reached_set = false
+func load_game(_player):
+	var file = File.new()
+	var save_path = "res://"+_player+".json"
+	if not file.file_exists(save_path):
+		print("Oops, save file does not exist.")
+		return
+	file.open(save_path,File.READ)
+
+	var data = {}
+	data.parse_json(open_file(save_path).get_as_text())
+	for node_path in data.keys():
+		var node_data = data[node_path]
+		get_node(node_path).load_state(node_data)
 	
-	for line in current_save_lines:
-		var line_parts = line.split(DATA_DELIMITER)
-		if line_parts.size() >= 2:
-			if line_parts[0] == pack:
-				reached_set = true
-				future_save_lines.push_back(str(pack, DATA_DELIMITER, value))
-			else:
-				future_save_lines.push_back(line)
+func delete(_player):
+	var save_path = "res://"+_player+".json"
+	open_file(save_path)
 	
-	if !reached_set:
-		future_save_lines.push_back(str(pack, DATA_DELIMITER, value))
-	
-	FileManager.set_file_lines(save_path, future_save_lines)
+func load_data():
+	pass
