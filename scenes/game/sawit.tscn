@@ -1,21 +1,26 @@
-[gd_scene load_steps=6 format=1]
+[gd_scene load_steps=9 format=1]
 
 [ext_resource path="res://assets/on_game/kelapa sawitnya/sprite_sawit.png" type="Texture" id=1]
 [ext_resource path="res://scripts/sawit.gd" type="Script" id=2]
 [ext_resource path="res://scenes/game/air.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/game/pupuk.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/game/panen.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/on_game/kelapa sawitnya/indicator/plant_indicator_01.png" type="Texture" id=6]
+[ext_resource path="res://assets/on_game/kelapa sawitnya/indicator/plant_over_01.png" type="Texture" id=7]
+[ext_resource path="res://assets/on_game/kelapa sawitnya/indicator/plant_progress_01.png" type="Texture" id=8]
 
-[node name="sawit" type="Sprite"]
+[node name="sawit" type="Sprite" groups=[
+"persistent",
+]]
 
-transform/scale = Vector2( 0.1, 0.1 )
+transform/scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 1 )
 hframes = 5
 script/script = ExtResource( 2 )
 start_time = 0.0
-end_time = 100.0
-critical_time = 60
-need_time = 98
+end_time = 100
+critical_time = 30
+need_time = 60
 
 [node name="Timer" type="Timer" parent="."]
 
@@ -27,32 +32,32 @@ autostart = false
 [node name="air" parent="." instance=ExtResource( 3 )]
 
 visibility/visible = false
-transform/pos = Vector2( 6.40001, -235.4 )
+transform/pos = Vector2( 6.40001, -145.4 )
 transform/scale = Vector2( 0.3, 0.3 )
 
 [node name="pupuk" parent="." instance=ExtResource( 4 )]
 
 visibility/visible = false
-transform/pos = Vector2( 4.80001, -233.6 )
+transform/pos = Vector2( 4.80001, -143.6 )
 transform/scale = Vector2( 0.3, 0.3 )
 
 [node name="panen" parent="." instance=ExtResource( 5 )]
 
 visibility/visible = false
-transform/pos = Vector2( 4.80001, -233.6 )
+transform/pos = Vector2( 4.80001, -143.6 )
 transform/scale = Vector2( 0.3, 0.3 )
 
-[node name="ProgressBar" type="ProgressBar" parent="."]
+[node name="ProgressBar" type="TextureProgress" parent="."]
 
-rect/rotation = 90.0
+rect/rotation = -90.0
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
-margin/left = 170.0
-margin/top = 140.0
-margin/right = 410.0
-margin/bottom = 170.0
+margin/left = 112.0
+margin/top = -30.0
+margin/right = 138.0
+margin/bottom = 182.0
 range/min = 0.0
 range/max = 100.0
 range/step = 1.0
@@ -60,6 +65,11 @@ range/page = 0.0
 range/value = 90.0
 range/exp_edit = false
 range/rounded = true
-percent/visible = false
+texture/under = ExtResource( 6 )
+texture/over = ExtResource( 7 )
+texture/progress = ExtResource( 8 )
+mode = 3
+radial_fill/fill_degrees = 360.0
+radial_fill/center_offset = Vector2( 0, 0 )
 
 
