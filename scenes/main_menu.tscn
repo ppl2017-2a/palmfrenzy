@@ -8,7 +8,7 @@
 [ext_resource path="res://assets/fonts/Enlighten your Destiny.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://assets/pop up about.png" type="Texture" id=7]
 [ext_resource path="res://scripts/ensiklopedia_controller.gd" type="Script" id=8]
-[ext_resource path="res://assets/ensiklopedia/tampilan encyclopedia 1.png" type="Texture" id=9]
+[ext_resource path="res://assets/ensiklopedia/tampilan encyclopedias.png" type="Texture" id=9]
 [ext_resource path="res://assets/buttons/button kanan.png" type="Texture" id=10]
 [ext_resource path="res://assets/buttons/button kiri.png" type="Texture" id=11]
 
@@ -47,7 +47,6 @@ texture = ExtResource( 2 )
 
 [node name="buttons" type="ReferenceFrame" parent="."]
 
-editor/display_folded = true
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
@@ -67,10 +66,10 @@ focus/ignore_mouse = false
 focus/stop_mouse = false
 size_flags/horizontal = 2
 size_flags/vertical = 2
-margin/left = 162.0
-margin/top = 236.0
-margin/right = 449.0
-margin/bottom = 508.0
+margin/left = 160.0
+margin/top = 240.0
+margin/right = 447.0
+margin/bottom = 512.0
 custom_constants/separation = 40
 alignment = 0
 
@@ -236,7 +235,6 @@ flat = false
 
 [node name="ensiklopedia_container" type="ReferenceFrame" parent="."]
 
-editor/display_folded = true
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
@@ -251,6 +249,7 @@ script/script = ExtResource( 8 )
 
 transform/pos = Vector2( 512, 362 )
 texture = ExtResource( 9 )
+hframes = 6
 region_rect = Rect2( 0, 0, 1023, 724 )
 
 [node name="no_button" type="Button" parent="ensiklopedia_container"]
@@ -323,7 +322,7 @@ playback/speed = 1.0
 
 [connection signal="pressed" from="exit_container/yes_button" to="." method="_on_exit_yes_button_pressed"]
 
-[connection signal="pressed" from="exit_container/no_button" to="." method="_on_no_button_pressed"]
+[connection signal="pressed" from="exit_container/no_button" to="." method="_on_back_to_menu_pressed"]
 
 [connection signal="pressed" from="about_container/no_button" to="." method="_on_no_button_pressed"]
 

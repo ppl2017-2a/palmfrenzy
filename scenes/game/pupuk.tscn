@@ -6,19 +6,22 @@
 
 resource/name = "pupuk_need"
 script/source = "extends Sprite
-
-var nilai = false
-onready var koin = get_node(\"Area2D\")
+onready var stok_pupuk = utils.get_main_node()
+#var nilai = false
 func _ready():
 	pass
 func _picked_up():
-	nilai = true
+#	nilai = true
 	print(\"picked up\")
-	object_state.air_value =nilai
-	object_state.p_pupuk-=1
-	get_node(\"../\").set_fixed_process(false)
-	get_node(\"../\")._on_popup_pressed()
-	get_node(\"../\").set_fixed_process(true)
+	if stok_pupuk.get_pupuk() < 1:
+		get_node(\"../../../error_message\").show()
+		get_node(\"../../../error_message/error_label\").set_text(\"Fertilizer out of stock!!\")
+	else:
+#		object_state.air_value =nilai
+		stok_pupuk.set_pupuk_count(-1)
+		get_node(\"../\").set_fixed_process(false)
+		get_node(\"../\")._on_popup_pressed()
+		get_node(\"../\").set_fixed_process(true)
 #	get_node(\"../skor\").set_text(str(get_node(\"/root/object_state\").air_value))
 	set_hidden(true)
 
@@ -28,12 +31,14 @@ func _on_Area2D_input_event( viewport, event, shape_idx ):
 		_picked_up()
 "
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="CircleShape2D" id=2]
 
 custom_solver_bias = 0.0
-extents = Vector2( 200, 300 )
+radius = 200.0
 
-[node name="pupuk" type="Sprite"]
+[node name="pupuk" type="Sprite" groups=[
+"persistent",
+]]
 
 transform/scale = Vector2( 0.2, 0.2 )
 texture = ExtResource( 1 )

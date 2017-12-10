@@ -1,15 +1,20 @@
 extends Sprite
 
 onready var timer = get_node("Timer")
-
-export (float, 0.0, 100.0, .1) var start_time = 15.0
-export (float, 0.0, 100.0, .1) var end_time   = 20
-export var critical_time = 60
-export var need_time = 98
-var kebutuhan = 0
+onready var my_id = get_instance_ID()
+var my_key = ""
+export (float, 0.0, 100.0, .1) var start_time = 0
+export (float, 0.0, 100.0, .1) var end_time   = 100
+export var critical_time = 30
+export var need_time = 60
+var kebutuhan = 7
 
 func _ready():
-	object_state.air_value = false
+	for key in get_parent().get_parent().player_property:
+		if key.begins_with("sawit"):
+			if get_parent().get_parent().player_property[key]["id"] == my_id:
+				my_key = key
+#	object_state.air_value = false
 	timer.set_timer_process_mode(Timer.TIMER_PROCESS_FIXED)
 	timer.set_wait_time(end_time - start_time)
 	timer.set_one_shot(true)
@@ -21,7 +26,7 @@ func _ready():
 	set_fixed_process(true)
 
 func gameover():
-	object_state.p_sawit -=1
+	get_parent().get_parent().set_sawit_count(-1,my_key)
 	queue_free()
 
 var t = 1
@@ -43,6 +48,7 @@ func _fixed_process(delta): # Print testing
 					set_frame(4)
 					get_node("panen").set_hidden(false)
 		elif(timer.get_time_left() < critical_time):
+			get_node("air").set_hidden(false)
 			if kebutuhan < 10:
 				self.set_frame(1)
 			else:

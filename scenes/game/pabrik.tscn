@@ -1,16 +1,26 @@
-[gd_scene load_steps=7 format=1]
+[gd_scene load_steps=9 format=1]
 
 [ext_resource path="res://assets/on_game/pabriknya/pabrik 1.png" type="Texture" id=1]
 [ext_resource path="res://scenes/game/pabrik.gd" type="Script" id=2]
 [ext_resource path="res://scenes/game/pabrik_uang.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/game/pabrik_uang.gd" type="Script" id=4]
-[ext_resource path="res://scenes/game/pabrik_mt.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/game/pabrik_mt.gd" type="Script" id=6]
+[ext_resource path="res://scenes/game/pabrik_mt.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/on_game/kelapa sawitnya/indicator/plant_indicator_01.png" type="Texture" id=5]
+[ext_resource path="res://assets/on_game/kelapa sawitnya/indicator/plant_over_01.png" type="Texture" id=6]
+[ext_resource path="res://assets/on_game/kelapa sawitnya/indicator/plant_progress_01.png" type="Texture" id=7]
+[ext_resource path="res://assets/on_game/kelapa sawitnya/indicator/nyawa_progress.png" type="Texture" id=8]
 
-[node name="pabrik" type="Sprite"]
+[node name="pabrik" type="Sprite" groups=[
+"persistent",
+]]
 
+transform/scale = Vector2( 0.3, 0.3 )
 texture = ExtResource( 1 )
 script/script = ExtResource( 2 )
+current_production = 0
+start_time = 0
+end_time = 25
+nyawa_value = 100
+pabrik_capacity = 5
 
 [node name="Timer" type="Timer" parent="."]
 
@@ -22,15 +32,61 @@ autostart = false
 [node name="pabrik_uang" parent="." instance=ExtResource( 3 )]
 
 visibility/visible = false
-transform/pos = Vector2( 0, -400 )
+transform/pos = Vector2( 20, -360 )
 transform/scale = Vector2( 0.16, 0.16 )
-script/script = ExtResource( 4 )
 
-[node name="pabrik_mt" parent="." instance=ExtResource( 5 )]
+[node name="pabrik_mt" parent="." instance=ExtResource( 4 )]
 
 visibility/visible = false
-transform/pos = Vector2( 0, -410 )
+transform/pos = Vector2( 20, -40 )
 transform/scale = Vector2( 0.16, 0.16 )
-script/script = ExtResource( 6 )
+
+[node name="kapasitas" type="TextureProgress" parent="."]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 140.0
+margin/top = -50.0
+margin/right = 180.0
+margin/bottom = 162.0
+range/min = 0.0
+range/max = 5.0
+range/step = 1.0
+range/page = 0.0
+range/value = 0.0
+range/exp_edit = false
+range/rounded = true
+texture/under = ExtResource( 5 )
+texture/over = ExtResource( 6 )
+texture/progress = ExtResource( 7 )
+mode = 3
+radial_fill/fill_degrees = 360.0
+radial_fill/center_offset = Vector2( 0, 0 )
+
+[node name="nyawa" type="TextureProgress" parent="."]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 190.0
+margin/top = -50.0
+margin/right = 230.0
+margin/bottom = 162.0
+range/min = 0.0
+range/max = 100.0
+range/step = 1.0
+range/page = 0.0
+range/value = 0.0
+range/exp_edit = false
+range/rounded = true
+texture/under = ExtResource( 5 )
+texture/over = ExtResource( 6 )
+texture/progress = ExtResource( 8 )
+mode = 3
+radial_fill/fill_degrees = 360.0
+radial_fill/center_offset = Vector2( 0, 0 )
 
 

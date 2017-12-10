@@ -1,14 +1,21 @@
 extends Sprite
-
-onready var koin = get_node("Area2D")
 func _ready():
 	pass
 func _picked_up():
+	if get_parent().get_production_speed() < 30:
+		utils.get_main_node().set_uang_count(-80)
+#		object_state.p_uang-=80
+	elif get_parent().get_production_speed() > 30 and get_parent().get_production_speed() < 50:
+		utils.get_main_node().set_uang_count(-40)
+#		object_state.p_uang-=40
+	else:
+		utils.get_main_node().set_uang_count(-20)
+#		object_state.p_uang-=20
 	print("Maintenance picked up")
-	object_state.p_uang-=10
-	get_node("../").set_fixed_process(false)
-	get_node("../")._on_popup_pressed()
-	get_node("../").set_fixed_process(true)
+	get_parent().maintened()
+#	get_node("../").set_fixed_process(false)
+#	get_node("../")._update_produksi()
+#	get_node("../").set_fixed_process(true)
 #	get_node("../skor").set_text(str(get_node("/root/object_state").air_value))
 	set_hidden(true)
 

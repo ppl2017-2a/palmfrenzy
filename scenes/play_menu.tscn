@@ -23,14 +23,14 @@ font/font = ExtResource( 5 )
 
 [sub_resource type="DynamicFont" id=3]
 
-font/size = 54
+font/size = 36
 font/use_mipmaps = false
 font/use_filter = false
 font/font = ExtResource( 5 )
 
 [sub_resource type="DynamicFont" id=4]
 
-font/size = 37
+font/size = 32
 font/use_mipmaps = false
 font/use_filter = false
 font/font = ExtResource( 5 )
@@ -136,6 +136,7 @@ flat = false
 
 [node name="container_tombol_new" type="ReferenceFrame" parent="."]
 
+editor/display_folded = true
 visibility/visible = false
 focus/ignore_mouse = false
 focus/stop_mouse = true
@@ -244,28 +245,46 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="container_tombol_continue"]
+[node name="current_player" type="Label" parent="container_tombol_continue"]
 
-editor/display_folded = true
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = -170.0
+margin/top = 90.0
+margin/right = 199.0
+margin/bottom = 138.0
+custom_fonts/font = SubResource( 4 )
+text = "CHOOSE FROM LIST ABOVE"
+align = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="VBoxContainer" type="ScrollContainer" parent="container_tombol_continue"]
+
 focus/ignore_mouse = false
 focus/stop_mouse = false
 size_flags/horizontal = 2
 size_flags/vertical = 2
 margin/left = -90.0
 margin/top = -160.0
-margin/right = 90.0
+margin/right = 170.0
 margin/bottom = -110.0
-alignment = 0
+scroll/horizontal = false
+scroll/vertical = true
 
 [node name="user1" type="Button" parent="container_tombol_continue/VBoxContainer"]
 
+rect/min_size = Vector2( 190, 50 )
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
 margin/left = 0.0
 margin/top = 0.0
-margin/right = 180.0
+margin/right = 190.0
 margin/bottom = 50.0
 custom_fonts/font = SubResource( 5 )
 toggle_mode = false
@@ -328,6 +347,56 @@ shortcut = null
 text = "Continue"
 flat = false
 
+[node name="container_error" type="ReferenceFrame" parent="."]
+
+editor/display_folded = true
+visibility/visible = false
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 40.0
+margin/bottom = 40.0
+
+[node name="ok_button" type="Button" parent="container_error"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+theme/theme = ExtResource( 3 )
+margin/left = -70.0
+margin/top = 70.0
+margin/right = 110.0
+margin/bottom = 160.0
+custom_fonts/font = SubResource( 1 )
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+text = "OK"
+flat = false
+
+[node name="Label" type="Label" parent="container_error"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = -180.0
+margin/top = -170.0
+margin/right = 200.0
+margin/bottom = 40.0
+custom_fonts/font = SubResource( 3 )
+text = "Cannot use %s as your username!"
+align = 1
+autowrap = true
+clip_text = true
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
 [connection signal="pressed" from="container_tombol_utama/exit_button" to="." method="_on_exit_pressed"]
 
 [connection signal="pressed" from="container_tombol_utama/new_button" to="." method="_on_new_button_pressed"]
@@ -337,5 +406,9 @@ flat = false
 [connection signal="pressed" from="container_tombol_new/mainkan_button" to="." method="_on_mainkan_button_pressed"]
 
 [connection signal="pressed" from="container_tombol_continue/delete_button" to="." method="_on_delete_button_pressed"]
+
+[connection signal="pressed" from="container_tombol_continue/continue_button" to="." method="_on_continue_button_pressed"]
+
+[connection signal="pressed" from="container_error/ok_button" to="." method="_on_ok_error_button_pressed"]
 
 

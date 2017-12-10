@@ -38,3 +38,7 @@ func _targets(var screen = "start"):
 		tween.interpolate_property(self, "rect/pos", current_coordinates, -target_coordinates, time, Tween.TRANS_EXPO, Tween.EASE_OUT, 0)
 		tween.start()
 
+
+
+func _on_back_to_menu_pressed():
+	_targets("start");

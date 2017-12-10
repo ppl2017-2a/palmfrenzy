@@ -1,10 +1,10 @@
 extends Node2D
-const H_PUPUK = 2
-const H_AIR = 4
-const H_SAWIT = 20
-const H_TRUK = 100
-const H_PABRIK = 300
-const H_PABRIKADV = 500
+export var H_PUPUK = 2
+export var H_AIR = 4
+export var H_SAWIT = 20
+export var H_TRUK = 100
+export var H_PABRIK = 300
+export var H_PABRIKADV = 500
 
 # barang [qty , subtotal]
 var pupuk=[0,0]
@@ -16,11 +16,10 @@ var pabrikAdv=[0,0]
 var total_harga=0
 var can_buy = true
 onready var l_total = "Total = 0"
-onready var l_uang = "Your Coin ="
-var uang_kita = object_state.p_uang
+onready var properti = get_node("../")
 func _ready():
 	set_fixed_process(true)
-	get_node("background/Label").set_text(l_uang+str(uang_kita))
+	get_node("background/Label").set_text(str(properti.get_uang()))
 	get_node("tombols/harga").set_text(l_total)
 	for components in get_node("tombols/shop_container").get_children():
 		if components.has_node("SpinBox"):
@@ -61,14 +60,15 @@ func _on_leave():
 
 func reset_value():
 	if can_buy:
-		uang_kita-=total_harga
-		object_state.p_uang = uang_kita
-		object_state.p_air += air[0]
-		object_state.p_sawit += sawit[0]
-		object_state.p_pupuk += pupuk[0]
-		object_state.p_truk += truk[0]
-		object_state.p_pabrik += pabrik[0]
-		object_state.p_pabrikAdv += pabrikAdv[0]
+		properti.set_uang_count(-total_harga)
+		properti.set_air_count(air[0])
+		properti.set_sawit_count(sawit[0],1)
+		properti.set_pupuk_count(pupuk[0])
+		properti.set_pabrik_count(pabrik[0],1)
+		properti.set_truk_count(truk[0],1)
+#		object_state.p_truk += truk[0]
+#		object_state.p_pabrik += pabrik[0]
+#		object_state.p_adv_pabrik += pabrikAdv[0]
 		
 	pupuk=[0,0]
 	air=[0,0]
@@ -82,11 +82,12 @@ func reset_value():
 	can_buy = true
 
 func _on_buy_button_pressed():
-	if(uang_kita < total_harga):
+	if(properti.get_uang() < total_harga or sawit[0] > object_state.max_objects[0] or truk[0] > object_state.max_objects[1]
+	or pabrik[0] > object_state.max_objects[2] or pabrikAdv[0] > object_state.max_objects[3]):
 		can_buy = false
 		get_node("konfirmasi/popup_konfirmasi").show()
 	else:
 		reset_value()
-		get_node("background/Label").set_text(l_uang+str(uang_kita))
+		get_node("background/Label").set_text(str(properti.get_uang()))
 		
 

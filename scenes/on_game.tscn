@@ -1,14 +1,17 @@
-[gd_scene load_steps=14 format=1]
+[gd_scene load_steps=21 format=1]
 
-[ext_resource path="res://assets/on_game/back game.png" type="Texture" id=1]
-[ext_resource path="res://scenes/game/hud.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/game/sawit.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/game/truk.tscn" type="PackedScene" id=4]
-[ext_resource path="res://scenes/game/pabrik.tscn" type="PackedScene" id=5]
-[ext_resource path="res://assets/pause back.png" type="Texture" id=6]
-[ext_resource path="res://assets/buttons/button continue.png" type="Texture" id=7]
-[ext_resource path="res://assets/pop up exit dan delete.png" type="Texture" id=8]
-[ext_resource path="res://assets/fonts/papercuts-2.ttf" type="DynamicFontData" id=9]
+[ext_resource path="res://scenes/on_game.gd" type="Script" id=1]
+[ext_resource path="res://assets/on_game/back game.png" type="Texture" id=2]
+[ext_resource path="res://scenes/game/hud.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/pause back.png" type="Texture" id=4]
+[ext_resource path="res://assets/buttons/button continue.png" type="Texture" id=5]
+[ext_resource path="res://assets/buttons/sound of.png" type="Texture" id=6]
+[ext_resource path="res://assets/buttons/sound on.png" type="Texture" id=7]
+[ext_resource path="res://assets/buttons/button exit.png" type="Texture" id=8]
+[ext_resource path="res://assets/pop up exit dan delete.png" type="Texture" id=9]
+[ext_resource path="res://assets/fonts/papercuts-2.ttf" type="DynamicFontData" id=10]
+[ext_resource path="res://assets/buttons/button ok.png" type="Texture" id=11]
+[ext_resource path="res://assets/bgm/bgm.wav" type="Sample" id=12]
 
 [sub_resource type="GDScript" id=1]
 
@@ -16,14 +19,10 @@ resource/name = "pause_popup"
 script/source = "extends Container
 
 func _ready():
-	var btn_pause = utils.get_main_node().find_node(\"pause_button\")
-	if btn_pause: btn_pause.connect(\"pressed\",self,\"_on_pause_pressed\")
-	
 	var btn_continue = utils.get_main_node().find_node(\"continue_button\")
 	if btn_continue: btn_continue.connect(\"pressed\",self,\"_continue_pressed\")
 	pass
-func _on_pause_pressed():
-	show()
+
 func _continue_pressed():
 	hide()
 "
@@ -40,9 +39,58 @@ func _on_pressed():
 	get_tree().set_pause(false)
 "
 
+[sub_resource type="GDScript" id=3]
+
+resource/name = "musik_toogle"
+script/source = "#Built-in script
+extends CheckButton
+onready var musik_player = utils.get_main_node().get_node(\"musik_player\")
+
+func _ready():
+	print(\"musik status: \",is_pressed())
+	pass
+
+func _on_musik_pressed():
+	if is_pressed():
+		play_musik()
+	else:
+		stop_musik()
+
+func play_musik():
+	musik_player.play(\"bgm\")
+
+func stop_musik():
+	musik_player.stop_all()
+
+func get_musik_status():
+	return is_pressed()"
+
 [sub_resource type="GDScript" id=4]
 
-resource/name = "ok_error_popup"
+script/source = "extends TextureButton
+onready var Save = get_tree().get_root().get_node(\"/root/SaveManager\")
+var dict = {}
+
+func _ready():
+	connect(\"pressed\",self,\"exit_pressed\")
+
+
+func exit_pressed():
+	dict = utils.get_main_node().get_all_data()
+	Save.save(object_state.get_nama(),dict)
+	get_tree().change_scene(\"res://scenes/main_menu.tscn\")
+	get_tree().set_pause(false)
+"
+
+[sub_resource type="DynamicFont" id=5]
+
+font/size = 48
+font/use_mipmaps = false
+font/use_filter = false
+font/font = ExtResource( 10 )
+
+[sub_resource type="GDScript" id=6]
+
 script/source = "extends TextureButton
 
 func _ready():
@@ -52,17 +100,31 @@ func _on_pressed():
 	get_parent().hide()
 "
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=7]
 
-font/size = 36
+font/size = 28
 font/use_mipmaps = true
 font/use_filter = true
-font/font = ExtResource( 9 )
+font/font = ExtResource( 10 )
 
-[node name="on_game" type="Node2D"]
+[sub_resource type="SampleLibrary" id=8]
+
+samples/bgm = {
+"db": 0.0,
+"pitch": 1.0,
+"priority": 0,
+"sample": ExtResource( 12 )
+}
+
+[node name="on_game" type="Node" groups=[
+"persistent",
+]]
+
+script/script = ExtResource( 1 )
 
 [node name="bg" type="CanvasLayer" parent="."]
 
+editor/display_folded = true
 layer = -3
 offset = Vector2( 0, 0 )
 rotation = 0.0
@@ -72,42 +134,33 @@ scale = Vector2( 1, 1 )
 
 transform/pos = Vector2( 508.546, 363.652 )
 transform/scale = Vector2( 0.908444, 0.908444 )
-texture = ExtResource( 1 )
+texture = ExtResource( 2 )
 
-[node name="hud" parent="." instance=ExtResource( 2 )]
+[node name="hud" parent="." groups=[
+"persistent",
+] instance=ExtResource( 3 )]
 
 process/pause_mode = 0
 editor/display_folded = true
 z/z = 0
 z/relative = false
 
-[node name="background" parent="hud"]
+[node name="object_game" type="Container" parent="." groups=[
+"persistent",
+]]
 
-editor/display_folded = true
-
-[node name="hud_tombol" parent="hud"]
-
-editor/display_folded = true
-
-[node name="sawit" parent="." instance=ExtResource( 3 )]
-
-transform/pos = Vector2( 140, 430 )
-transform/scale = Vector2( 0.60989, 0.60989 )
-
-[node name="truk" parent="." instance=ExtResource( 4 )]
-
-transform/pos = Vector2( 420, 490 )
-transform/scale = Vector2( 0.3, 0.3 )
-
-[node name="pabrik" parent="." instance=ExtResource( 5 )]
-
-transform/pos = Vector2( 870, 480 )
-transform/scale = Vector2( 0.6, 0.6 )
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 40.0
+margin/bottom = 40.0
 
 [node name="pause_game" type="Container" parent="."]
 
 process/pause_mode = 2
-editor/display_folded = true
 visibility/visible = false
 focus/ignore_mouse = false
 focus/stop_mouse = true
@@ -127,9 +180,9 @@ size_flags/horizontal = 2
 size_flags/vertical = 2
 margin/left = 0.0
 margin/top = 0.0
-margin/right = 0.0
-margin/bottom = 0.0
-texture = ExtResource( 6 )
+margin/right = 1023.0
+margin/bottom = 723.0
+texture = ExtResource( 4 )
 stretch_mode = 0
 
 [node name="continue_button" type="TextureButton" parent="pause_game"]
@@ -145,10 +198,50 @@ margin/bottom = 287.0
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
-textures/normal = ExtResource( 7 )
+textures/normal = ExtResource( 5 )
 params/resize_mode = 0
 params/stretch_mode = 0
 script/script = SubResource( 2 )
+
+[node name="musik" type="CheckButton" parent="pause_game"]
+
+rect/scale = Vector2( 0.5, 0.5 )
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 460.0
+margin/top = 320.0
+margin/right = 696.0
+margin/bottom = 562.0
+custom_icons/off = ExtResource( 6 )
+custom_icons/on = ExtResource( 7 )
+toggle_mode = true
+is_pressed = true
+enabled_focus_mode = 2
+shortcut = null
+flat = true
+align = 0
+script/script = SubResource( 3 )
+
+[node name="exit_button" type="TextureButton" parent="pause_game"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 340.0
+margin/top = 480.0
+margin/right = 676.0
+margin/bottom = 597.0
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+textures/normal = ExtResource( 8 )
+params/resize_mode = 0
+params/scale = Vector2( 0.5, 0.5 )
+params/stretch_mode = 0
+script/script = SubResource( 4 )
 
 [node name="error_message" type="Container" parent="."]
 
@@ -172,10 +265,41 @@ size_flags/horizontal = 2
 size_flags/vertical = 2
 margin/left = 0.0
 margin/top = 0.0
-margin/right = 0.0
-margin/bottom = 0.0
-texture = ExtResource( 8 )
+margin/right = 1023.0
+margin/bottom = 724.0
+texture = ExtResource( 9 )
 stretch_mode = 0
+
+[node name="Label" type="Label" parent="error_message"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 340.0
+margin/top = 250.0
+margin/right = 690.0
+margin/bottom = 322.0
+custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Ooops!!"
+align = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="TextureFrame" type="ColorFrame" parent="error_message/Label"]
+
+visibility/behind_parent = true
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 336.0
+margin/bottom = 70.0
+color = Color( 0.878431, 0.678431, 0.423529, 1 )
 
 [node name="ok_button" type="TextureButton" parent="error_message"]
 
@@ -183,18 +307,18 @@ focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
-margin/left = 420.0
-margin/top = 410.0
-margin/right = 622.0
-margin/bottom = 480.2
+margin/left = 410.0
+margin/top = 400.0
+margin/right = 612.0
+margin/bottom = 470.2
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
-textures/normal = ExtResource( 7 )
+textures/normal = ExtResource( 11 )
 params/resize_mode = 0
 params/scale = Vector2( 0.6, 0.6 )
 params/stretch_mode = 0
-script/script = SubResource( 4 )
+script/script = SubResource( 6 )
 
 [node name="error_label" type="Label" parent="error_message"]
 
@@ -202,17 +326,31 @@ focus/ignore_mouse = true
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
-margin/left = 470.0
-margin/top = 320.0
-margin/right = 553.0
-margin/bottom = 374.0
-custom_fonts/font = SubResource( 5 )
+margin/left = 160.0
+margin/top = 310.0
+margin/right = 850.0
+margin/bottom = 410.0
+custom_fonts/font = SubResource( 7 )
 custom_colors/font_color = Color( 1, 0, 0, 1 )
 text = "error"
 align = 1
+valign = 1
+autowrap = true
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
+[node name="musik_player" type="SamplePlayer2D" parent="."]
 
-[editable path="hud"]
+params/volume_db = 0.0
+params/pitch_scale = 1.0
+params/attenuation/min_distance = 1.0
+params/attenuation/max_distance = 2048.0
+params/attenuation/distance_exp = 1.0
+config/polyphony = 1
+config/samples = SubResource( 8 )
+config/pitch_random = 0.0
+
+[connection signal="pressed" from="pause_game/musik" to="pause_game/musik" method="_on_musik_pressed"]
+
+
