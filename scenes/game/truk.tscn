@@ -1,12 +1,15 @@
-[gd_scene load_steps=4 format=1]
+[gd_scene load_steps=7 format=1]
 
 [ext_resource path="res://assets/on_game/truk nya/sprite_truk.png" type="Texture" id=1]
 [ext_resource path="res://scenes/game/truk.gd" type="Script" id=2]
 [ext_resource path="res://scenes/game/truk_kirim.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/on_game/kelapa sawitnya/indicator/plant_indicator_01.png" type="Texture" id=4]
+[ext_resource path="res://assets/on_game/kelapa sawitnya/indicator/plant_over_01.png" type="Texture" id=5]
+[ext_resource path="res://assets/on_game/kelapa sawitnya/indicator/plant_progress_01.png" type="Texture" id=6]
 
 [node name="truk" type="Sprite"]
 
-transform/scale = Vector2( 0.1, 0.1 )
+transform/scale = Vector2( 0.3, 0.3 )
 texture = ExtResource( 1 )
 hframes = 3
 script/script = ExtResource( 2 )
@@ -25,16 +28,17 @@ autostart = false
 visibility/visible = false
 transform/pos = Vector2( 0, -260 )
 
-[node name="ProgressBar" type="ProgressBar" parent="."]
+[node name="ProgressBar" type="TextureProgress" parent="."]
 
+rect/rotation = -90.0
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
-margin/left = -110.0
+margin/left = 92.0
 margin/top = 110.0
-margin/right = 100.0
-margin/bottom = 146.0
+margin/right = 118.0
+margin/bottom = 322.0
 range/min = 0.0
 range/max = 5.0
 range/step = 1.0
@@ -42,6 +46,11 @@ range/page = 0.0
 range/value = 1.0
 range/exp_edit = false
 range/rounded = true
-percent/visible = true
+texture/under = ExtResource( 4 )
+texture/over = ExtResource( 5 )
+texture/progress = ExtResource( 6 )
+mode = 3
+radial_fill/fill_degrees = 360.0
+radial_fill/center_offset = Vector2( 0, 0 )
 
 
